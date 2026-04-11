@@ -4,8 +4,7 @@ metadata:
   name: dashy-route
 spec:
   parentRefs:
-  - name: traefik-gateway
-    namespace: kube-system
+  - name: dashy-gateway
   hostnames:
   - "dashy.homelab.local"
   rules:
