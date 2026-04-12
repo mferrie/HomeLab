@@ -1,2 +1,1 @@
-I'm running several services on a cluster consisting of two Raspberry Pis and a laptop.
-Initially, I ran everything in standalone Docker, but I am working on migrating to k3s for higher availability and fault tolerance
+This is my learning environment consisting of two Raspberry Pis and a Dell laptop. I previously ran everything in standalone Docker, but I'm trying to learn orchestration for higher availability and fault tolerance.
