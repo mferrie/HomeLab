@@ -1,0 +1,11 @@
+apiVersion: traefik.io/v1alpha1
+kind: Middleware
+metadata:
+  name: immich-buffering
+  namespace: immich
+spec:
+  buffering:
+    maxRequestBodyBytes: 0 # 0 = no limit
+    memRequestBodyBytes: 10485760 # 10 Mi buffer
+    maxResponseBodyBytes: 0
+    retryExpression: ""
