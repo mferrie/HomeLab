@@ -11,9 +11,34 @@ data:
       - job_name: 'prometheus'
         static_configs:
           - targets: ['localhost:9090']
-      - job_name: 'kubernetes-nodes'
+
+      - job_name: 'node-exporter'
         kubernetes_sd_configs:
           - role: node
-      - job_name: 'kubernetes-pods'
+        relabel_configs:
+          - source_labels: [__address__]
+            regex: '(.*):.*'
+            replacement: '${1}:9100'
+            target_label: __address__
+
+      - job_name: 'kubelet-cadvisor'
         kubernetes_sd_configs:
-          - role: pod
+          - role: node
+        scheme: https
+        tls_config:
+          insecure_skip_verify: true
+        bearer_token_file: /var/run/secrets/kubernetes.io/serviceaccount/token
+        metrics_path: /metrics/cadvisor
+
+      - job_name: 'kubelet'
+        kubernetes_sd_configs:
+          - role: node
+        scheme: https
+        tls_config:
+          insecure_skip_verify: true
+        bearer_token_file: /var/run/secrets/kubernetes.io/serviceaccount/token
+        metrics_path: /metrics
+
+      - job_name: 'longhorn'
+        static_configs:
+          - targets: ['longhorn-backend.longhorn-system.svc.cluster.local:9500']
