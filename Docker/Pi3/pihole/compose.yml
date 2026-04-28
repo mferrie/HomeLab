@@ -4,7 +4,7 @@ services:
     image: pihole/pihole:latest
     environment:
       TZ: 'America/Chicago'
-      FTLCONF_webserver_api_password: 'Spartan#117'
+      FTLCONF_webserver_api_password: ${PIHOLE_PASSWORD}
       FTLCONF_dns_listeningMode: 'ALL'
     volumes:
       - './etc-pihole:/etc/pihole'
