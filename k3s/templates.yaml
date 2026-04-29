@@ -44,13 +44,13 @@ kind: Service
 metadata:
   name: my-service
 spec:
-  selector: null
-  app: my-app
+  selector:
+    app: my-app
   ports:
     - protocol: TCP
-  port: 80
-  targetPort: 80
-  type: ClusterIP
+      port: 80
+      targetPort: 80
+      type: ClusterIP
 
 
 ---
@@ -82,13 +82,13 @@ metadata:
 spec:
   serviceName: my-service
   replicas: 3
-  selector: null
-  matchLabels: null
-  app: my-app
-  template: null
-  metadata: null
-  labels:
-    app: my-app
+  selector:
+    matchLabels:
+      app: my-app
+  template:
+    metadata:
+      labels:
+        app: my-app
   spec:
     containers:
       - name: my-container
@@ -113,15 +113,13 @@ kind: Job
 metadata:
   name: my-job
 spec:
-  template: null
-  spec: null
-  containers:
-    - name: my-container
-  image: busybox
-  command:
-    - echo
-    - Hello, Kubernetes!
-  restartPolicy: OnFailure
+  template:
+    spec:
+      containers:
+        - name: my-container
+          image: busybox
+          command: ["echo", "Hello, Kubernetes!"]
+          restartPolicy: OnFailure
 
 ---
 # Ingress
@@ -132,15 +130,15 @@ metadata:
 spec:
   rules:
     - host: myapp.example.com
-  http: null
-  paths:
-    - path: /
-  pathType: Prefix
-  backend: null
-  service: null
-  name: my-service
-  port: null
-  number: 80
+  http:
+    paths:
+      - path: /
+        pathType: Prefix
+  backend:
+    service:
+      name: my-service
+      port:
+        number: 80
 
 ---
 # NetworkPolicy
@@ -156,6 +154,6 @@ spec:
       - Ingress
 ingress:
   - from:
-      - podSelector: null
+      - podSelector:
         matchLabels:
           role: frontend
