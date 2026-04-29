@@ -1,0 +1,161 @@
+# Kubernetes Manifests
+# From https://medium.com/@bhuwanmishra_59371/a-comprehensive-guide-to-writing-kubernetes-manifests-from-scratch-4d02f58448ae
+
+# Basic pod
+apiVersion: v1
+kind: Pod
+metadata:
+  name: my-pod
+  labels:
+    app: my-app
+spec:
+  containers:
+    - name: my-container
+      image: nginx:latest
+  ports:
+    - containerPort: 80
+
+---
+# Deployment
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: my-deployment
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: my-app
+template:
+  metadata:
+    labels:
+      app: my-app
+  spec:
+    containers:
+      - name: my-container
+        image: nginx:latest
+        ports:
+          - containerPort: 80
+
+---
+# Service
+apiVersion: v1
+kind: Service
+metadata:
+  name: my-service
+spec:
+  selector: null
+  app: my-app
+  ports:
+    - protocol: TCP
+  port: 80
+  targetPort: 80
+  type: ClusterIP
+
+
+---
+# ConfigMap
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: my-config
+data:
+  key1: value1
+  key2: value2
+
+---
+# Secret
+apiVersion: v1
+kind: Secret
+metadata:
+  name: my-secret
+type: Opaque
+data:
+  password: dGVzdHBhc3M=
+
+---
+# StatefulSet
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: my-statefulset
+spec:
+  serviceName: my-service
+  replicas: 3
+  selector: null
+  matchLabels: null
+  app: my-app
+  template: null
+  metadata: null
+  labels:
+    app: my-app
+  spec:
+    containers:
+      - name: my-container
+        image: nginx:latest
+    volumeMounts:
+      - name: my-volume
+        mountPath: /usr/share/nginx/html
+        volumeClaimTemplates:
+          - metadata: null
+            name: my-volume
+            spec:
+              accessModes:
+                - ReadWriteOnce
+              resources:
+                requests:
+                  storage: 1Gi
+
+---
+# Job
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: my-job
+spec:
+  template: null
+  spec: null
+  containers:
+    - name: my-container
+  image: busybox
+  command:
+    - echo
+    - Hello, Kubernetes!
+  restartPolicy: OnFailure
+
+---
+# Ingress
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: my-ingress
+spec:
+  rules:
+    - host: myapp.example.com
+  http: null
+  paths:
+    - path: /
+  pathType: Prefix
+  backend: null
+  service: null
+  name: my-service
+  port: null
+  number: 80
+
+---
+# NetworkPolicy
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: my-network-policy
+spec:
+  podSelector:
+    matchLabels:
+      app: my-app
+    policyTypes:
+      - Ingress
+ingress:
+  - from:
+      - podSelector: null
+        matchLabels:
+          role: frontend
