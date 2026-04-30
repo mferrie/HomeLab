@@ -97,8 +97,8 @@ spec:
       - name: my-volume
         mountPath: /usr/share/nginx/html
         volumeClaimTemplates:
-          - metadata: null
-            name: my-volume
+          - metadata:
+              name: my-volume
             spec:
               accessModes:
                 - ReadWriteOnce
