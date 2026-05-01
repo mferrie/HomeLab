@@ -30,6 +30,7 @@ spec:
           operator: In
           values:
           - pi-3
+
 ---
 apiVersion: v1
 kind: PersistentVolumeClaim
@@ -155,6 +156,7 @@ spec:
       - name: pihole-local-dnsmasq-volume
         persistentVolumeClaim:
           claimName: pihole-local-dnsmasq-claim
+
 ---
 apiVersion: v1
 kind: Service
