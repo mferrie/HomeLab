@@ -1,0 +1,35 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: forgejo
+  labels:
+    app: forgejo
+  namespace: forgejo
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: forgejo
+  template:
+    metadata:
+      labels:
+        app: forgejo
+    spec:
+      containers:
+      - name: forgejo
+        image: codeberg.org/forgejo/forgejo:15
+        imagePullPolicy: IfNotPresent
+        ports:
+        - containerPort: 3000
+          name: forgejo-http
+          protocol: TCP
+        - containerPort: 222
+          name: forgejo-ssh
+          protocol: TCP
+        volumeMounts:
+        - name: forgejo-volume
+          mountPath: /data
+      volumes:
+      - name: forgejo-volume
+        persistentVolumeClaim:
+          claimName: forgejo-pvc
